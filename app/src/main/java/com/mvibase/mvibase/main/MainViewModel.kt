@@ -1,24 +1,33 @@
 package com.mvibase.mvibase.main
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
 import com.mvibase.mvibase.common.BaseViewModel
+import com.mvibase.mvibase.common.Dispatcher
+import com.mvibase.mvibase.common.Response
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
 
-class MainViewModel(val repo: MainDataSource) : ViewModel(), BaseViewModel<MainAction, MainViewState> {
-    val viewState: MainViewState = MainViewState()
+class MainViewModel(private val repo: MainDataSource, private val dispatcher: Dispatcher)
+    : BaseViewModel<MainAction, MainViewState>(), CoroutineScope {
 
-    override fun state(): LiveData<MainViewState>  {
-        return MutableLiveData<MainViewState>()
+    override var viewState: MainViewState = MainViewState()
+    override val coroutineContext: CoroutineContext
+        get() = dispatcher.background
+
+    override fun load() {
+        getUser()
     }
 
-    override fun action(): LiveData<MainAction> {
-        return MutableLiveData<MainAction>()
+    fun loginClicked() {
+        sendAction(MainAction.GoToLogin)
     }
 
-    fun helloWorldClicked() {
+    private fun getUser() = launch {
+        render { copy(eventResponse = Response.Loading(true)) }
 
+        //Do get user
+        render { copy(eventResponse = Response.Success("User")) }
     }
 
 }

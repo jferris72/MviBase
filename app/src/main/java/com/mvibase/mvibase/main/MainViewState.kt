@@ -1,9 +1,9 @@
 package com.mvibase.mvibase.main
 
 import com.mvibase.mvibase.common.BaseViewState
-import com.mvibase.mvibase.common.Result
+import com.mvibase.mvibase.common.Response
 
 
 data class MainViewState(
-    val eventResult: Result = Result.Unknown()
+    val eventResponse: Response = Response.Unknown()
 ) : BaseViewState
