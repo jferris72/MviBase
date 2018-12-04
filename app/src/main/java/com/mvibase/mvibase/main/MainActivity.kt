@@ -1,9 +1,12 @@
 package com.mvibase.mvibase.main
 
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
+import android.widget.LinearLayout
 import com.mvibase.mvibase.R
 import com.mvibase.mvibase.common.BaseView
 import com.mvibase.mvibase.common.Response
+import com.mvibase.mvibase.data.GithubUser
 import com.mvibase.mvibase.main.MainAction.GoToLogin
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -16,16 +19,16 @@ class MainActivity : BaseView<MainAction, MainViewState, MainViewModel>() {
         setContentView(R.layout.activity_main)
         super.onCreate(savedInstanceState)
 
-        helloWorld.setOnClickListener { viewModel.loginClicked() }
     }
 
     override fun onRender(viewState: MainViewState) {
-        val response = viewState.eventResponse
-
-        when(response) {
-            is Response.Loading -> { /* show loading */ }
-            is Response.Error -> { /* show error */ }
-            is Response.Success<*> -> { /* show view */ }
+        when {
+            viewState.error != null -> { /* show error */ }
+            viewState.loading -> { /* show loading */ }
+            else -> {
+                usersRv.adapter = UserAdapter(viewState.data)
+                usersRv.layoutManager = LinearLayoutManager(this)
+            }
         }
     }
 

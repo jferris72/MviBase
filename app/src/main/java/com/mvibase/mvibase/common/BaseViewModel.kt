@@ -22,7 +22,7 @@ abstract class BaseViewModel<A: BaseAction, VS: BaseViewState> : ViewModel() {
         renderLiveData.value = viewState
     }
 
-    fun sendAction(a: A) {
+    fun action(a: A) {
         actionLiveData.value = a
     }
 
